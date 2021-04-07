@@ -1,6 +1,6 @@
 const subzero = {
   name: 'Subzero',
-  hp: 50,
+  hp: 90,
   img: 'http://reactmarathon-api.herokuapp.com/assets/subzero.gif',
   weapon: ['snowball', 'axe', 'knife'],
   attack: function () {
@@ -11,7 +11,7 @@ subzero.attack()
 
 const scorpion = {
   name: 'Scorpion',
-  hp: 100,
+  hp: 60,
   img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
   weapon: ['chain', 'axe', 'knife'],
   attack: function () {
@@ -29,7 +29,7 @@ function createPlayer1(name, hp, img) {
 
   const $life = document.createElement('div')
   $life.classList.add('life')
-  $life.style.width = hp
+  $life.style.width = hp + '%'
 
   const $name = document.createElement('div')
   $name.classList.add('name')
@@ -61,7 +61,7 @@ function createPlayer2(name, hp, img) {
 
   const $life = document.createElement('div')
   $life.classList.add('life')
-  $life.style.width = hp
+  $life.style.width = hp + '%'
 
   const $name = document.createElement('div')
   $name.classList.add('name')
