@@ -64,22 +64,23 @@ function changeHp(player) {
     '.player' + player.player + ' .life'
   )
   player.hp -= Math.ceil(Math.random() * 20)
-  $playerLife.style.width = player.hp + '%'
-  console.log('HP: ', player.hp)
 
   if (player.hp <= 0) {
     $playerLife.style.width = 0
     $arenas.appendChild(playerWin(player.name))
     $randomBtn.disabled = true
+  } else {
+    $playerLife.style.width = player.hp + '%'
+    console.log('HP: ', player.hp)
   }
 }
 
-// function playerLose(name) {
-//   const $loseTitle = createElement('div', 'loseTitle')
-//   $loseTitle.innerText = name + ' lose'
+function playerLose(name) {
+  const $loseTitle = createElement('div', 'loseTitle')
+  $loseTitle.innerText = name + ' lose'
 
-//   return $loseTitle
-// }
+  return $loseTitle
+}
 
 function playerWin(name) {
   const $winTitle = createElement('div', 'winTitle')
