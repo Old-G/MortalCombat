@@ -10,6 +10,9 @@ const player1 = {
   attack: function () {
     console.log(player1.name + ' Fight!!!')
   },
+  changeHp: changeHp,
+  elHP: elHP,
+  renderHP: renderHP,
 }
 player1.attack()
 
@@ -22,6 +25,9 @@ const player2 = {
   attack: function () {
     console.log(player2.name + ' Fight!!!')
   },
+  changeHp: changeHp,
+  elHP: elHP,
+  renderHP: renderHP,
 }
 player2.attack()
 
@@ -59,40 +65,56 @@ function createPlayer(playerData) {
   return $player
 }
 
-function changeHp(player) {
-  const $playerLife = document.querySelector(
-    '.player' + player.player + ' .life'
-  )
-  player.hp -= Math.ceil(Math.random() * 20)
-
-  if (player.hp <= 0) {
-    $playerLife.style.width = 0
-    $arenas.appendChild(playerWin(player.name))
-    $randomBtn.disabled = true
-  } else {
-    $playerLife.style.width = player.hp + '%'
-    console.log('HP: ', player.hp)
-  }
+function getRandom(num) {
+  return Math.ceil(Math.random() * num)
 }
 
-function playerLose(name) {
-  const $loseTitle = createElement('div', 'loseTitle')
-  $loseTitle.innerText = name + ' lose'
+function changeHp(changeHP) {
+  this.hp -= getRandom(changeHP)
+  if (this.hp <= 0) {
+    this.hp = 0
+  }
+  return this.hp
+}
 
-  return $loseTitle
+function elHP() {
+  const $playerLife = document.querySelector(`.player${this.player} .life`)
+  return $playerLife
+}
+
+function renderHP() {
+  return (this.elHP().style.width = `${this.hp}%`)
 }
 
 function playerWin(name) {
   const $winTitle = createElement('div', 'winTitle')
-  $winTitle.innerText = name + ' WIN!!!'
+  if (name) {
+    $winTitle.innerText = name + ' WIN!!!'
+  } else {
+    $winTitle.innerText = 'Draw!!!'
+  }
 
   return $winTitle
 }
 
 $randomBtn.addEventListener('click', () => {
-  console.log('click')
-  changeHp(player1)
-  changeHp(player2)
+  player1.changeHp(getRandom(20))
+  player2.changeHp(getRandom(20))
+
+  player1.renderHP()
+  player2.renderHP()
+
+  if (player1.hp === 0 || player2.hp === 0) {
+    $randomBtn.disabled = true
+  }
+
+  if (player1.hp === 0 && player1.hp < player2.hp) {
+    $arenas.appendChild(playerWin(player2.name))
+  } else if (player2.hp === 0 && player2.hp < player1.hp) {
+    $arenas.appendChild(playerWin(player1.name))
+  } else if (player1.hp === 0 && player2.hp === 0) {
+    $arenas.appendChild(playerWin())
+  }
 })
 
 $arenas.appendChild(createPlayer(player1))
