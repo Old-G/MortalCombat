@@ -142,7 +142,6 @@ function createReloadButton() {
 
   $reloadButton.addEventListener('click', function () {
     window.location.reload()
-    startLogs('start', gameDate, player1, player2)
   })
 
   $reloadButtonDiv.appendChild($reloadButton)
@@ -161,13 +160,13 @@ function playerWin(name) {
 function getWinner() {
   if (player1.hp === 0 && player1.hp < player2.hp) {
     $arenas.appendChild(playerWin(player2.name))
-    endLogs('end', player2, player1)
+    generateLogs('end', gameDate, player2, player1)
   } else if (player2.hp === 0 && player2.hp < player1.hp) {
     $arenas.appendChild(playerWin(player1.name))
-    endLogs('end', player1, player2)
+    generateLogs('end', gameDate, player1, player2)
   } else if (player1.hp === 0 && player2.hp === 0) {
     $arenas.appendChild(playerWin())
-    drawLogs('draw')
+    generateLogs('draw')
   }
 }
 
@@ -216,42 +215,39 @@ function updateAttack() {
   player2.renderHP()
 }
 
-function generateLogs(type, player1, player2) {
-  const text = logs[type][Math.floor(Math.random() * type.length)]
-    .replace('[playerKick]', player1.name)
-    .replace('[playerDefence]', player2.name)
-  const el = `<p>${text}</p>`
-  $chat.insertAdjacentHTML('afterbegin', el)
-  console.log(text)
-}
-
 const date = new Date()
 const gameDate = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
 
-function startLogs(type, gameDate, player1, player2) {
-  const text = logs[type]
-    .replace('[time]', gameDate)
-    .replace('[player1]', player1.name)
-    .replace('[player2]', player2.name)
+function generateLogs(type, gameDate, player1, player2) {
+  let text = ''
+  switch (type) {
+    case 'start':
+      text = logs[type]
+        .replace('[time]', gameDate)
+        .replace('[player1]', player1.name)
+        .replace('[player2]', player2.name)
+      break
+    case 'hit':
+      text = logs[type][Math.floor(Math.random() * type.length)]
+        .replace('[playerKick]', player1.name)
+        .replace('[playerDefence]', player2.name)
+      break
+    case 'defence':
+      text = logs[type][Math.floor(Math.random() * type.length)]
+        .replace('[playerKick]', player2.name)
+        .replace('[playerDefence]', player1.name)
+      break
+    case 'end':
+      text = logs[type][Math.floor(Math.random() * type.length)]
+        .replace('[playerWins]', player1.name)
+        .replace('[playerLose]', player2.name)
+      break
+    case 'draw':
+      text = logs[type]
+      break
+  }
   const el = `<p>${text}</p>`
   $chat.insertAdjacentHTML('afterbegin', el)
-  console.log(text)
-}
-
-function endLogs(type, player1, player2) {
-  const text = logs[type][Math.floor(Math.random() * type.length)]
-    .replace('[playerWins]', player1.name)
-    .replace('[playerLose]', player2.name)
-  const el = `<p>${text}</p>`
-  $chat.insertAdjacentHTML('afterbegin', el)
-  console.log(text)
-}
-
-function drawLogs(type) {
-  const text = logs[type]
-  const el = `<p>${text}</p>`
-  $chat.insertAdjacentHTML('afterbegin', el)
-  console.log(text)
 }
 
 $formFight.addEventListener('submit', (e) => {
@@ -262,13 +258,15 @@ $formFight.addEventListener('submit', (e) => {
   if (player.defence !== enemy.hit) {
     player1.changeHp(enemy.value)
     player1.renderHP()
-    generateLogs('hit', player2, player1)
+    generateLogs('hit', gameDate, player2, player1)
+    generateLogs('defence', gameDate, player1, player2)
   }
 
   if (enemy.defence !== player.hit) {
     player2.changeHp(enemy.value)
     player2.renderHP()
-    generateLogs('hit', player1, player2)
+    generateLogs('hit', gameDate, player1, player2)
+    generateLogs('defence', gameDate, player2, player1)
   }
 
   updateAttack()
@@ -279,4 +277,4 @@ $formFight.addEventListener('submit', (e) => {
 
 $arenas.appendChild(createPlayer(player1))
 $arenas.appendChild(createPlayer(player2))
-startLogs('start', gameDate, player1, player2)
+generateLogs('start', gameDate, player1, player2)
