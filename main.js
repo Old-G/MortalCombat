@@ -160,10 +160,10 @@ function playerWin(name) {
 function getWinner() {
   if (player1.hp === 0 && player1.hp < player2.hp) {
     $arenas.appendChild(playerWin(player2.name))
-    generateLogs('end', gameDate, player2, player1)
+    generateLogs('end', player2, player1)
   } else if (player2.hp === 0 && player2.hp < player1.hp) {
     $arenas.appendChild(playerWin(player1.name))
-    generateLogs('end', gameDate, player1, player2)
+    generateLogs('end', player1, player2)
   } else if (player1.hp === 0 && player2.hp === 0) {
     $arenas.appendChild(playerWin())
     generateLogs('draw')
@@ -215,11 +215,12 @@ function updateAttack() {
   player2.renderHP()
 }
 
-const date = new Date()
-const gameDate = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-
-function generateLogs(type, gameDate, player1, player2) {
+function generateLogs(type, player1, player2, value) {
   let text = ''
+
+  const date = new Date()
+  const gameDate = `${date.getHours()}:${date.getMinutes()}`
+
   switch (type) {
     case 'start':
       text = logs[type]
@@ -231,6 +232,9 @@ function generateLogs(type, gameDate, player1, player2) {
       text = logs[type][Math.floor(Math.random() * type.length)]
         .replace('[playerKick]', player1.name)
         .replace('[playerDefence]', player2.name)
+      text = `<p>${gameDate} - ${text} ${-value} ${'HP'} [${
+        player2.hp
+      } /100]</p>`
       break
     case 'defence':
       text = logs[type][Math.floor(Math.random() * type.length)]
@@ -258,15 +262,17 @@ $formFight.addEventListener('submit', (e) => {
   if (player.defence !== enemy.hit) {
     player1.changeHp(enemy.value)
     player1.renderHP()
-    generateLogs('hit', gameDate, player2, player1)
-    generateLogs('defence', gameDate, player1, player2)
+    generateLogs('hit', player2, player1, player.value)
+  } else {
+    generateLogs('defence', player1, player2)
   }
 
   if (enemy.defence !== player.hit) {
     player2.changeHp(enemy.value)
     player2.renderHP()
-    generateLogs('hit', gameDate, player1, player2)
-    generateLogs('defence', gameDate, player2, player1)
+    generateLogs('hit', player1, player2, enemy.value)
+  } else {
+    generateLogs('defence', player2, player1)
   }
 
   updateAttack()
@@ -277,4 +283,4 @@ $formFight.addEventListener('submit', (e) => {
 
 $arenas.appendChild(createPlayer(player1))
 $arenas.appendChild(createPlayer(player2))
-generateLogs('start', gameDate, player1, player2)
+generateLogs('start', player1, player2)
