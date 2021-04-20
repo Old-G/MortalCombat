@@ -1,7 +1,7 @@
 import { player1, player2 } from './players.js'
 import { logs } from './logs.js'
 import { enemyAttack, callAttack, updateAttack } from './attack.js'
-import { getWinner } from './win.js'
+import { getWinner } from './playerWin.js'
 import { updateButton } from './btns.js'
 import { createElement } from './createElem.js'
 
