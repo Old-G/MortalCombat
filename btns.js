@@ -1,5 +1,5 @@
-import { player1, player2 } from './players.js'
-import { $arenas, $randomBtn } from './main.js'
+import { player1, player2 } from './classGame.js'
+import { $arenas, $randomBtn } from './classGame.js'
 
 export const createReloadButton = () => {
   const $reloadButtonDiv = document.createElement('div')

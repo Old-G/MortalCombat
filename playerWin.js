@@ -1,5 +1,5 @@
-import { player1, player2 } from './players.js'
-import { $arenas, generateLogs } from './main.js'
+import { player1, player2 } from './classGame.js'
+import { $arenas } from './classGame.js'
 import { createElement } from './createElem.js'
 
 export const playerWin = (name) => {
