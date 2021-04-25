@@ -1,7 +1,7 @@
-import { getRandom } from './playerHp.js'
 import { HIT, ATTACK } from './hitAtt.js'
-import { $formFight } from './main.js'
-import { player1, player2 } from './players.js'
+import { $formFight } from './classGame.js'
+import { player1, player2 } from './classGame.js'
+import { getRandom } from './utils.js'
 
 export const enemyAttack = () => {
   const hit = ATTACK[getRandom(3) - 1]
